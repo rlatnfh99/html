@@ -76,7 +76,6 @@ void insert_use_link(struct student **ST){
 	(*ST)->avg = (float)(*ST)->sum/3;
 	(*ST)->grade = get_grade((*ST)->avg);
 	(*ST)->link = NULL;
-	make_rank(ST);
 }
 
 void output(struct student *ST){
@@ -107,6 +106,7 @@ int insert(struct student **ST){
 			search = search->link;
 		}
 	}
+	make_rank(ST);
 	return 0;
 }
 
@@ -136,7 +136,7 @@ int choose_menu(struct student **ST){
 		break;
 
 	case '3' :
-	//	modify_delete(ST);
+		modify_delete(ST);
 		break;
 
 	case '4' :

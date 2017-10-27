@@ -1,0 +1,18 @@
+테두리는 bodrder
+옵션은
+두깨 px,
+색 red blue yellow
+테두리종류 solid(실선), dotted(점선)
+
+패딩은 padding:30px 이런식으로 사용
+
+마진은 margin:5px 라고 하면된다.
+
+아이디를 지정하여 효과를 주고 싶다면
+#ID {
+}
+라고 하면된다.
+
+나타내고 싶은 컨텐츠가 있다면 그것의 테두리는 border,
+테두리와 컨텐츠의 사이의 거리는 패딩 padding,
+컨텐츠와 컨텐츠 사이의 거리는 margin이라고 한다.
