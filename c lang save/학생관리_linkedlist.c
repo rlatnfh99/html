@@ -12,6 +12,29 @@ struct student {
 	struct student *link;
 };
 
+int get_id(struct student **ST){
+	struct student *tmp;
+	int id=1000;
+	int i=0;
+
+	if(*ST==NULL){
+		return id;
+	}
+
+	tmp = *ST;
+	while(tmp){
+		i++;
+		if(tmp->link==NULL){
+			return id+i;
+		}
+		tmp = tmp->link;
+
+	}
+
+	return id+i;
+}
+
+
 char get_grade(float avg){
 	if(avg >= 90){
 		return 'A';
@@ -51,11 +74,9 @@ void make_rank(struct student **ST){
 		cur = cur->link;
 	}
 }
-void insert_use_link(struct student **ST){
-	char buf[32];
 
-	(*ST)->id = 1000;
-	printf("insert\n");
+void insert_detail(struct student **ST){
+	char buf[32];
 
 	printf(" 이름 : ");
 	fflush(stdin);
@@ -75,7 +96,15 @@ void insert_use_link(struct student **ST){
 	(*ST)->sum = (*ST)->kor+(*ST)->eng+(*ST)->math;
 	(*ST)->avg = (float)(*ST)->sum/3;
 	(*ST)->grade = get_grade((*ST)->avg);
+}
+
+void insert_use_link(struct student **root, struct student **ST){
+
+
+	(*ST)->id = get_id(root);
 	(*ST)->link = NULL;
+	insert_detail(ST);
+	return;
 }
 
 void output(struct student *ST){
@@ -93,7 +122,8 @@ int insert(struct student **ST){
 
 	tmp = (struct student*)malloc(sizeof(struct student));
 
-	insert_use_link(&tmp);
+	insert_use_link(ST, &tmp);
+
 	if(*ST==NULL){
 		*ST = tmp;
 	}else{
@@ -106,8 +136,132 @@ int insert(struct student **ST){
 			search = search->link;
 		}
 	}
-	make_rank(ST);
 	return 0;
+}
+
+int delete_link_use_id(struct student **ST,int input_id){
+	struct student *tmp;
+	struct student *search;
+	if(*ST==NULL){
+		printf("등록된 학생이 없습니다.\n");
+		return 0;
+	}
+
+
+	if((*ST)->id == input_id){
+		if((*ST)->link == NULL){
+			free((*ST));
+		} else {
+			tmp = (*ST)->link;
+			free((*ST));
+			(*ST) = tmp;
+		}
+		return 1;
+	}
+
+	search = *ST;
+	while(search){
+		if(search->link == NULL){
+			return -1;
+		}
+		if(search->link->id == input_id){
+			tmp = search->link->link;
+			free(search->link);
+			search->link = tmp;
+			return 1;
+		}
+
+		search = search->link;
+	}
+	return -1;
+}
+struct student* get_link_use_id(struct student **ST,int input_id){
+	struct student *tmp;
+
+	if(*ST==NULL){
+		printf("등록된 학생이 없습니다.\n");
+		return NULL;
+	}
+
+	tmp = *ST;
+
+	while(tmp){
+		if(tmp->id == input_id){
+			return tmp;
+		}
+		if(tmp->link == NULL){
+			return NULL;
+		}
+		tmp = tmp->link;
+	}
+
+	return NULL;
+}
+
+void delete_st(struct student **ST){
+	int input_id,ret;
+
+	while(1){
+		printf("ID를 입력하세요 : ");
+		scanf("%d",&input_id);
+		if(input_id == 0){
+			return;
+		}
+		ret = delete_link_use_id(ST,input_id);
+		if(ret==0){
+			break;
+		}else if(ret== -1){
+			printf("잘못된 ID를 입력하셨습니다.\n");
+			continue;
+		}else{
+			printf("성공적으로 삭제되었습니다.\n");
+		}
+		return;
+	}
+}
+
+void modify_st(struct student **ST){
+	int input_id;
+	struct student *tmp;
+
+	while(1){
+		printf("ID를 입력하세요 : ");
+		scanf("%d",&input_id);
+		if(input_id == 0){
+			return;
+		}
+		tmp = get_link_use_id(ST,input_id);
+		if(tmp==NULL){
+			printf("잘못된 ID를 입력하셨습니다. 다시 입력해주세요.\n");
+			continue;
+		}
+		insert_detail(&tmp);
+
+		return;
+	}
+}
+
+void modify_delete(struct student **ST){
+	int select;
+
+	printf("modify&delete\n");
+	printf("  1 : 수정\n");
+	printf("  2 : 삭제\n");
+	printf("   > ");
+	scanf("%d",&select);
+
+	switch(select){
+	case 1 :
+		modify_st(ST);
+		break;
+
+	case 2 :
+		delete_st(ST);
+		break;
+
+	default :
+		break;
+	}
 }
 
 int choose_menu(struct student **ST){
@@ -132,6 +286,7 @@ int choose_menu(struct student **ST){
 		break;
 
 	case '2' :
+		make_rank(ST);
 		output(*ST);
 		break;
 

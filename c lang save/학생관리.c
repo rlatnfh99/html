@@ -200,6 +200,7 @@ void modify_delete(student *ST, int n){
 	default :
 		break;
 	}
+}
 
 void load(student *ST, int n){
 	FILE *f = fopen("save.txt","r");
