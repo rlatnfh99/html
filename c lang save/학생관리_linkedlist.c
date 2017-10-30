@@ -99,8 +99,6 @@ void insert_detail(struct student **ST){
 }
 
 void insert_use_link(struct student **root, struct student **ST){
-
-
 	(*ST)->id = get_id(root);
 	(*ST)->link = NULL;
 	insert_detail(ST);

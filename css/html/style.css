@@ -1,0 +1,21 @@
+header{
+  border-bottom:1px solid gray;
+  padding:20px;
+}
+nav{
+  width:200px;
+  float:left;
+  height:600px;
+  border-right:1px solid gray;
+}
+nav ol{
+  list-style:none;
+}
+article{
+  float:left;
+  padding:20px;
+}
+h2 {
+  font-size:30px;
+  color:red;
+}
